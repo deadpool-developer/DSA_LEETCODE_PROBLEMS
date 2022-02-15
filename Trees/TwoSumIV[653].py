@@ -41,4 +41,48 @@ class Solution(object):
                 return True
         return False
         
-#2. 
+#2. Checking the value - root.val 
+def ino(l,root,k):
+    if root:
+        if k - root.val in l:     #if k - value present in the list we'll return true
+            return True
+        l.add(root.val)           #else add the root value in the list and then check for the next numbers
+        return ino(l,root.left,k) or ino(l,root.right,k)
+class Solution(object):
+    def findTarget(self, root, k):
+        nums = set()
+        return ino(nums,root,k)
+    
+#IMPORTANT SOLUTION
+#3.Converting BST into Doubly Linked list
+
+def dll(root):
+    if not root:
+        return None , None
+    lh , lt = dll(root.left)
+    rh, rt = dll(root.right)
+    if lh:
+        h = lh
+        lt.right = root
+        root.left = lt
+    else:
+        h = root
+    if rh:
+        t = rt
+        rh.left = root
+        root.right = rh
+    else:
+        t = root
+    return h , t
+class Solution(object):
+    def findTarget(self, root, k):
+        h , t = dll(root)
+        while h.val != t.val:
+            sum = h.val + t.val
+            if sum == k:
+                return True
+            if sum < k:
+                h = h.right
+            else:
+                t = t.left
+        return False
